@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -26,6 +27,7 @@ func main() {
 
 	var delta time.Duration
 	var deltaToNextTick time.Duration
+	var s string
 	for {
 		delta = end.Sub(time.Now())
 		if delta <= 0 {
@@ -33,7 +35,9 @@ func main() {
 		}
 		deltaToNextTick = delta % interval
 		time.Sleep(deltaToNextTick)
-		fmt.Fprintf(os.Stderr, "    \r%s", (delta - deltaToNextTick).String())
+		fmt.Fprintf(os.Stderr, "\r%s", strings.Repeat(" ", len(s))) // Clear existing line
+		s = (delta - deltaToNextTick).String()
+		fmt.Fprintf(os.Stderr, "\r%s", s)
 	}
 
 	fmt.Fprintln(os.Stderr, "\rTimer complete.")
