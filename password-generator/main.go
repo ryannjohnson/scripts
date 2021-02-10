@@ -14,6 +14,7 @@ const (
 )
 
 var (
+	includeChars   = flag.String("chars", "", "additional allowed characters")
 	includeLetters = flag.Bool("letters", false, fmt.Sprintf("include %s", letters))
 	includeNumbers = flag.Bool("numbers", false, fmt.Sprintf("include %s", numbers))
 	includeSymbols = flag.Bool("symbols", false, fmt.Sprintf("include %s", symbols))
@@ -22,7 +23,7 @@ var (
 
 func main() {
 	flag.Parse()
-	includeAll := !*includeLetters && !*includeNumbers && !*includeSymbols
+	includeAll := !*includeLetters && !*includeNumbers && !*includeSymbols && *includeChars == ""
 
 	chars := ""
 	if *includeLetters || includeAll {
@@ -33,6 +34,9 @@ func main() {
 	}
 	if *includeSymbols || includeAll {
 		chars += symbols
+	}
+	if *includeChars != "" {
+		chars += *includeChars
 	}
 
 	password := make([]byte, *length)
